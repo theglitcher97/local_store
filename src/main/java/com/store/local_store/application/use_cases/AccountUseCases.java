@@ -8,8 +8,6 @@ public class AccountUseCases {
     private AccountService accountService;
 
     public void createAccount(String email, String password) {
-        // create account
         this.accountService.createAccount(email, password);
-        // send confirmation email
     }
 }
