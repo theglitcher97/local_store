@@ -1,4 +1,9 @@
 package com.store.local_store.persistence.repositories;
 
-public interface UserEntityRepository {
+import com.store.local_store.persistence.entities.UserEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface UserEntityRepository extends JpaRepository<UserEntity, Long> {
 }
