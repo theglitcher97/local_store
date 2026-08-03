@@ -4,4 +4,6 @@ public interface AccountRepository {
     void createAccount(String email, String password);
 
     void authenticate(String email, String password);
+
+    boolean isEmailAvailable(String email);
 }

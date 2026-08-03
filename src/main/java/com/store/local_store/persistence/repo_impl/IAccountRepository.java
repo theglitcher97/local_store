@@ -33,4 +33,9 @@ public class IAccountRepository implements AccountRepository {
             throw new EntityNotFoundException("Cannot find account for email: "+email);
         });
     }
+
+    @Override
+    public boolean isEmailAvailable(String email) {
+        return !this.userRepository.existsByEmail(email);
+    }
 }
