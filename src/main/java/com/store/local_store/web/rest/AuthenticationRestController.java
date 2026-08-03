@@ -2,6 +2,7 @@ package com.store.local_store.web.rest;
 
 import com.store.local_store.application.use_cases.AccountUseCases;
 import com.store.local_store.web.dtos.CreateAccountDTO;
+import com.store.local_store.web.dtos.LoginDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/v1/auth")
@@ -25,5 +28,11 @@ public class AuthenticationRestController {
 
         this.accountUseCases.createAccount(createAccountDTO.email(), createAccountDTO.password());
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Object> login(@RequestBody LoginDTO loginDTO) {
+        String token = this.accountUseCases.login(loginDTO.email(), loginDTO.password());
+        return new ResponseEntity<>(Map.of("token", token), HttpStatus.OK);
     }
 }

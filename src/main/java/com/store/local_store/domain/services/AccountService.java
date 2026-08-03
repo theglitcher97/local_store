@@ -12,4 +12,8 @@ public class AccountService {
     public void createAccount(String email, String password) {
         this.accountRepository.createAccount(email, password);
     }
+
+    public void authenticate(String email, String password) {
+        this.accountRepository.authenticate(email, password);
+    }
 }
