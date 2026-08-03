@@ -3,12 +3,12 @@ package com.store.local_store.persistence.repo_impl;
 import com.store.local_store.domain.ports.repos.AccountRepository;
 import com.store.local_store.persistence.entities.UserEntity;
 import com.store.local_store.persistence.repositories.UserEntityRepository;
+import com.store.local_store.web.exceptions.custom.IncorrectPasswordException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import javax.naming.AuthenticationException;
 import java.util.Optional;
 
 @Component
@@ -28,7 +28,7 @@ public class IAccountRepository implements AccountRepository {
         Optional<UserEntity> userEntity = this.userRepository.findByEmail(email);
         userEntity.ifPresentOrElse(user -> {
             if (!this.passwordEncoder.matches(password, user.getPassword()))
-                throw new SecurityException("Password is incorrect");
+                throw new IncorrectPasswordException("Password is incorrect");
         }, () -> {
             throw new EntityNotFoundException("Cannot find account for email: "+email);
         });

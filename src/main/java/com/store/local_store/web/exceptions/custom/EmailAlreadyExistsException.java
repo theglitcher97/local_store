@@ -1,0 +1,7 @@
+package com.store.local_store.web.exceptions.custom;
+
+public class EmailAlreadyExistsException extends RuntimeException {
+    public EmailAlreadyExistsException(String message) {
+        super(message);
+    }
+}

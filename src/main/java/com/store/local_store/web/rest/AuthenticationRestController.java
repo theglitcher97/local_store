@@ -3,6 +3,7 @@ package com.store.local_store.web.rest;
 import com.store.local_store.application.use_cases.AccountUseCases;
 import com.store.local_store.web.dtos.CreateAccountDTO;
 import com.store.local_store.web.dtos.LoginDTO;
+import com.store.local_store.web.exceptions.custom.PasswordDontMatchException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class AuthenticationRestController {
         // TODO: validate email is valid
 
         if (!createAccountDTO.password().equals(createAccountDTO.confirmPassword()))
-            new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new PasswordDontMatchException("Passwords don't match");
 
         this.accountUseCases.createAccount(createAccountDTO.email(), createAccountDTO.password());
         return new ResponseEntity<>(HttpStatus.CREATED);
