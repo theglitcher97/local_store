@@ -1,0 +1,12 @@
+package com.store.local_store.persistence.repositories;
+
+import com.store.local_store.persistence.entities.CategoryEntity;
+import com.store.local_store.persistence.entities.UserEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+@Repository
+public interface CategoryEntityRepository extends JpaRepository<CategoryEntity, Long> {
+}
