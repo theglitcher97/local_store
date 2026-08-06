@@ -1,5 +1,6 @@
 package com.store.local_store.utils;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -31,5 +32,19 @@ public class JwtUtils {
                 .signWith(Keys.hmacShaKeyFor(JWT_SECRET.getBytes()), SignatureAlgorithm.HS256)
                 .issuer(JWT_ISSUER)
                 .compact();
+    }
+
+    public Claims validateToken(String bearerToken) {
+        // this part also validates if the token expired
+        return Jwts.parser()
+                .verifyWith(Keys.hmacShaKeyFor(this.JWT_SECRET.getBytes()))
+                .requireIssuer(this.JWT_ISSUER)
+                .build()
+                .parseSignedClaims(bearerToken)
+                .getPayload();
+    }
+
+    public String getEmail(Claims claims) {
+        return claims.get("sub", String.class);
     }
 }
