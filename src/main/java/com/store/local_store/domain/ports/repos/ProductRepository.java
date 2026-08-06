@@ -1,9 +1,6 @@
 package com.store.local_store.domain.ports.repos;
 
-public interface AccountRepository {
-    void createAccount(String email, String password);
+public interface ProductRepository {
 
-    void authenticate(String email, String password);
-
-    boolean isEmailAvailable(String email);
+    Long create(String name, Double price, Long categoryId);
 }

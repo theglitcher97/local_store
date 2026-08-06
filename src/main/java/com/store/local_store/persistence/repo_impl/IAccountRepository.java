@@ -6,6 +6,9 @@ import com.store.local_store.persistence.repositories.UserEntityRepository;
 import com.store.local_store.web.exceptions.custom.IncorrectPasswordException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +16,7 @@ import java.util.Optional;
 
 @Component
 @AllArgsConstructor
-public class IAccountRepository implements AccountRepository {
+public class IAccountRepository implements AccountRepository, UserDetailsService {
     private UserEntityRepository userRepository;
     private PasswordEncoder passwordEncoder;
 
@@ -37,5 +40,10 @@ public class IAccountRepository implements AccountRepository {
     @Override
     public boolean isEmailAvailable(String email) {
         return !this.userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return this.userRepository.findByEmail(email).get();
     }
 }
