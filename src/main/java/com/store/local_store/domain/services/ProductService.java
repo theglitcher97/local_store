@@ -1,8 +1,6 @@
 package com.store.local_store.domain.services;
 
-import com.store.local_store.domain.ports.repos.AccountRepository;
 import com.store.local_store.domain.ports.repos.ProductRepository;
-import com.store.local_store.web.exceptions.custom.EmailAlreadyExistsException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
