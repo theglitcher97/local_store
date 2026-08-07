@@ -1,6 +1,7 @@
 package com.store.local_store.web.rest;
 
 import com.store.local_store.application.use_cases.ProductUseCases;
+import com.store.local_store.domain.common.PageResult;
 import com.store.local_store.web.dtos.NewProductDTO;
 import com.store.local_store.web.dtos.ProductDTO;
 import com.store.local_store.web.enums.SORT_DIR;
@@ -10,8 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/v1/products")
@@ -34,7 +33,7 @@ public class ProductRestController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ProductDTO>> listProducts(
+    public ResponseEntity<PageResult<ProductDTO>> listProducts(
             @PathParam("page") Integer page,
             @PathParam("size") Integer size,
             @PathParam("sortBy") String sortBy,
@@ -44,7 +43,7 @@ public class ProductRestController {
         if (sortBy == null || sortBy.isBlank()) sortBy = "name";
         if (sortDir == null) sortDir = SORT_DIR.ASC;
 
-        Page<ProductDTO> products = this.productUseCases.listProducts(page, size, sortBy, sortDir);
+        PageResult<ProductDTO> products = this.productUseCases.listProducts(page, size, sortBy, sortDir);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 }
