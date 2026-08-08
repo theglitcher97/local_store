@@ -20,6 +20,8 @@ public class CategoryEntity {
     private Long id;
     @Column(unique = true, nullable = false, updatable = false)
     private String name;
-    @OneToMany(mappedBy = "category")
+
+    // do I really need this
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     private Set<ProductEntity> products;
 }

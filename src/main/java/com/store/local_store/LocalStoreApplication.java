@@ -27,13 +27,13 @@ public class LocalStoreApplication {
 	public CommandLineRunner createAdminUser(UserEntityRepository userRepository, PasswordEncoder passwordEncoder) {
 		return args -> {
 			if (userRepository.findByEmail("admin@gmail.com").isEmpty()) {
-				UserEntity user = new UserEntity(null, "admin@gmail.com", passwordEncoder.encode("admin123"), "ROLE_ADMIN");
+				UserEntity user = UserEntity.create("admin@gmail.com", passwordEncoder.encode("admin123"), "ROLE_ADMIN");
 				userRepository.save(user);
 				System.out.println("Admin user created!!");
 			}
 
 			if (userRepository.findByEmail("test_user").isEmpty()) {
-				UserEntity user = new UserEntity(null, "test_user@gmail.com", passwordEncoder.encode("test123"), "ROLE_USER");
+				UserEntity user = UserEntity.create("test_user@gmail.com", passwordEncoder.encode("test123"), "ROLE_USER");
 				userRepository.save(user);
 				System.out.println("Test user created!!");
 			}

@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 @Table(name = "users")
@@ -27,6 +28,10 @@ public class UserEntity implements UserDetails {
     private String password;
     private String role;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JoinColumn(updatable = false)
+    private CartEntity cart;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(this.role));
@@ -35,5 +40,16 @@ public class UserEntity implements UserDetails {
     @Override
     public String getUsername() {
         return this.email;
+    }
+
+    public static UserEntity create(String email, String password, String role) {
+        UserEntity userEntity = new UserEntity();
+        userEntity.setEmail(email);
+        userEntity.setPassword(password);
+        userEntity.setRole(role);
+
+        CartEntity cartEntity = new CartEntity(null, userEntity, new HashSet<>());
+        userEntity.setCart(cartEntity);
+        return userEntity;
     }
 }

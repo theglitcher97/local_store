@@ -1,6 +1,7 @@
 package com.store.local_store.persistence.repo_impl;
 
 import com.store.local_store.domain.ports.repos.AccountRepository;
+import com.store.local_store.persistence.entities.CartEntity;
 import com.store.local_store.persistence.entities.UserEntity;
 import com.store.local_store.persistence.repositories.UserEntityRepository;
 import com.store.local_store.web.exceptions.custom.IncorrectPasswordException;
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.Optional;
 
 @Component
@@ -22,8 +24,14 @@ public class IAccountRepository implements AccountRepository, UserDetailsService
 
     @Override
     public void createAccount(String email, String password) {
-        UserEntity userEntity = new UserEntity(null, email, this.passwordEncoder.encode(password), "ROLE_CUSTOMER");
+        // create and save account
+        UserEntity userEntity =  UserEntity.create(email, this.passwordEncoder.encode(password), "ROLE_CUSTOMER");
         this.userRepository.save(userEntity);
+
+        // link cart
+//        CartEntity cart = new CartEntity(null, userEntity, new HashSet<>());
+//        userEntity.setCart(cart);
+//        this.userRepository.save(userEntity);
     }
 
     @Override

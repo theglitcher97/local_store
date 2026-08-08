@@ -19,8 +19,15 @@ public class CartItemEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true, nullable = false, updatable = false)
+
+    @ManyToOne(optional = false)
+    @JoinColumn(updatable = false, nullable = false)
+    private CartEntity cart;
+
+    @OneToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(updatable = false, nullable = false)
     private ProductEntity product;
-    @Column
+
+    @Column(nullable = false)
     private Long quantity;
 }

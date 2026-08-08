@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Table(name = "carts")
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,7 +19,11 @@ public class CartEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
-    @JoinColumn(name = "user_id", nullable = false, updatable = false)
+
+    @OneToOne(optional = false)
+    @JoinColumn(nullable = false, updatable = false)
     private UserEntity user;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cart")
+    private Set<CartItemEntity> cartItems = new HashSet<>();
 }
