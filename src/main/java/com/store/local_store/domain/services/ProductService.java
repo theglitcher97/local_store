@@ -12,8 +12,10 @@ import org.springframework.stereotype.Service;
 public class ProductService {
     private ProductRepository productRepository;
 
-    public Long create(String name, Double price, Long categoryId) {
-        return this.productRepository.create(name, price, categoryId);
+    public Product create(Product product) {
+        Long id = this.productRepository.create(product);
+        product.setId(id);
+        return product;
     }
 
     public PageResult<Product> listProducts(Integer page, Integer size, String sortBy, SORT_DIR sortDir) {

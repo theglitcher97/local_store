@@ -6,7 +6,7 @@ import com.store.local_store.web.enums.SORT_DIR;
 
 public interface ProductRepository {
 
-    Long create(String name, Double price, Long categoryId);
+    Long create(Product product);
 
     PageResult<Product> list(Integer page, Integer size, String sortBy, SORT_DIR sortDir);
 }

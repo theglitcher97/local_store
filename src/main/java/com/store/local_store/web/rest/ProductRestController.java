@@ -1,13 +1,13 @@
 package com.store.local_store.web.rest;
 
+import com.store.local_store.application.model.CreateProductCommand;
 import com.store.local_store.application.use_cases.ProductUseCases;
 import com.store.local_store.domain.common.PageResult;
-import com.store.local_store.web.dtos.NewProductDTO;
+import com.store.local_store.web.dtos.CreateProductRequest;
 import com.store.local_store.web.dtos.ProductDTO;
 import com.store.local_store.web.enums.SORT_DIR;
 import jakarta.websocket.server.PathParam;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,17 +19,25 @@ public class ProductRestController {
     private ProductUseCases productUseCases;
 
     @PostMapping
-    public ResponseEntity<NewProductDTO> saveProduct(@RequestBody NewProductDTO product) {
+    public ResponseEntity<ProductDTO> saveProduct(@RequestBody CreateProductRequest product) {
         // validate incoming data
         if (product.name() == null || product.name().isBlank() ||
                 product.price() == null || product.price() <= 0.0 ||
+                product.quantity() == null || product.quantity() <= 0 ||
                 product.categoryId() == null)
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        // create product
-        Long id = this.productUseCases.createProduct(product.name(), product.price(), product.categoryId());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // return object with error information
 
-        // return response
-        return new ResponseEntity<>(new NewProductDTO(id, product.name(), product.price(), product.categoryId()), HttpStatus.CREATED);
+        // create product command
+        CreateProductCommand createProductCommand =  new CreateProductCommand(
+                product.name(),
+                product.price(),
+                product.quantity(),
+                product.categoryId());
+
+        // create product
+        ProductDTO productDTO = this.productUseCases.createProduct(createProductCommand);
+
+        return new ResponseEntity<>(productDTO, HttpStatus.CREATED);
     }
 
     @GetMapping

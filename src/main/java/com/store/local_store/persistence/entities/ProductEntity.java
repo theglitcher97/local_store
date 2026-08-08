@@ -20,6 +20,8 @@ public class ProductEntity {
     private String name;
     @Column(nullable = false)
     private Double price;
+    @Column(nullable = false)
+    private Integer quantity;
     @ManyToOne
     @JoinColumn(nullable = false)
     private CategoryEntity category;
