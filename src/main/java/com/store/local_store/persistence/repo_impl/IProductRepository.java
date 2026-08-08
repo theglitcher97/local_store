@@ -6,7 +6,6 @@ import com.store.local_store.domain.ports.repos.ProductRepository;
 import com.store.local_store.persistence.entities.ProductEntity;
 import com.store.local_store.persistence.mapper.PageResultMapper;
 import com.store.local_store.persistence.mapper.ProductMapper;
-import com.store.local_store.persistence.repositories.CategoryEntityRepository;
 import com.store.local_store.persistence.repositories.ProductEntityRepository;
 import com.store.local_store.web.enums.SORT_DIR;
 import lombok.AllArgsConstructor;

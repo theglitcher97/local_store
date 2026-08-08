@@ -1,5 +1,6 @@
 package com.store.local_store.domain.services;
 
+import com.store.local_store.domain.model.User;
 import com.store.local_store.domain.ports.repos.AccountRepository;
 import com.store.local_store.web.exceptions.custom.EmailAlreadyExistsException;
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ public class AccountService {
         this.accountRepository.createAccount(email, password);
     }
 
-    public void authenticate(String email, String password) {
-        this.accountRepository.authenticate(email, password);
+    public User authenticate(String email, String password) {
+        return this.accountRepository.authenticate(email, password);
     }
 }

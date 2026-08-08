@@ -39,7 +39,7 @@ public class UserEntity implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.email;
+        return this.id.toString();
     }
 
     public static UserEntity create(String email, String password, String role) {

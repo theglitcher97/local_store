@@ -24,9 +24,9 @@ public class JwtUtils {
     @Value("${jwt.issuer}")
     private String JWT_ISSUER;
 
-    public String generateToken(String email) {
+    public String generateToken(String userId) {
         return Jwts.builder()
-                .subject(email)
+                .subject(userId)
                 .issuedAt(new Date())
                 .expiration(EXPIRATION_TIME)
                 .signWith(Keys.hmacShaKeyFor(JWT_SECRET.getBytes()), SignatureAlgorithm.HS256)
@@ -44,7 +44,7 @@ public class JwtUtils {
                 .getPayload();
     }
 
-    public String getEmail(Claims claims) {
+    public String getSubject(Claims claims) {
         return claims.get("sub", String.class);
     }
 }

@@ -43,15 +43,15 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // validate the token
         Claims claims = this.jwtUtils.validateToken(bearerToken);
-        // extract email from claims
-        String email = this.jwtUtils.getEmail(claims);
-        // query user by email
-        UserDetails userDetails = this.iAccountRepository.loadUserByUsername(email);
+        // extract userId from claims
+        String userId = this.jwtUtils.getSubject(claims);
+        // query user by userId
+        UserDetails userDetails = this.iAccountRepository.loadUserByUsername(userId);
 
         // load user in security context so username password auth will work
         if (SecurityContextHolder.getContext().getAuthentication() == null) {
             UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    new UsernamePasswordAuthenticationToken(userId, null, userDetails.getAuthorities());
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }

@@ -1,5 +1,6 @@
 package com.store.local_store.application.use_cases;
 
+import com.store.local_store.domain.model.User;
 import com.store.local_store.domain.services.AccountService;
 import com.store.local_store.utils.JwtUtils;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,7 @@ public class AccountUseCases {
 
     @Transactional
     public String login(String email, String password) {
-        this.accountService.authenticate(email, password);
-        return this.jwtUtils.generateToken(email);
+        User user = this.accountService.authenticate(email, password);
+        return this.jwtUtils.generateToken(user.getId().toString());
     }
 }
