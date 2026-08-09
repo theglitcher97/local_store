@@ -1,8 +1,10 @@
 package com.store.local_store;
 
 import com.store.local_store.persistence.entities.CategoryEntity;
+import com.store.local_store.persistence.entities.ProductEntity;
 import com.store.local_store.persistence.entities.UserEntity;
 import com.store.local_store.persistence.repositories.CategoryEntityRepository;
+import com.store.local_store.persistence.repositories.ProductEntityRepository;
 import com.store.local_store.persistence.repositories.UserEntityRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -11,8 +13,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
-import java.util.List;
 
 @SpringBootApplication
 public class LocalStoreApplication {
@@ -42,14 +44,13 @@ public class LocalStoreApplication {
 
 	@Bean
 	@Transactional
-	public CommandLineRunner saveCategories(CategoryEntityRepository categoryRepository){
+	public CommandLineRunner saveCategories(CategoryEntityRepository categoryRepository, ProductEntityRepository productRepository){
 		return runner -> {
-			categoryRepository.saveAll(List.of(
-					new CategoryEntity(null, "technology", new HashSet<>()),
-					new CategoryEntity(null, "electronics", new HashSet<>()),
-					new CategoryEntity(null, "food", new HashSet<>()),
-					new CategoryEntity(null, "sports", new HashSet<>())
-			));
+			CategoryEntity categoryEntity = new CategoryEntity(null, "technology");
+			categoryRepository.save(categoryEntity);
+
+			ProductEntity productEntity = new ProductEntity(null, "laptop", new BigDecimal("1500"), 100, categoryEntity);
+			productRepository.save(productEntity);
 		};
 	}
 

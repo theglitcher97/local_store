@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+
 @RestController
 @RequestMapping(value = "/v1/products")
 @AllArgsConstructor
@@ -22,7 +24,7 @@ public class ProductRestController {
     public ResponseEntity<ProductDTO> saveProduct(@RequestBody CreateProductRequest product) {
         // validate incoming data
         if (product.name() == null || product.name().isBlank() ||
-                product.price() == null || product.price() <= 0.0 ||
+                product.price() == null || product.price().compareTo(BigDecimal.ZERO) <= 0 ||
                 product.quantity() == null || product.quantity() <= 0 ||
                 product.categoryId() == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // return object with error information
@@ -46,6 +48,7 @@ public class ProductRestController {
             @PathParam("size") Integer size,
             @PathParam("sortBy") String sortBy,
             @PathParam("sortDir") SORT_DIR sortDir) {
+        // should move this to use case ?
         if (page == null || page < 0) page = 0;
         if (size == null || size <= 0) size = 10;
         if (sortBy == null || sortBy.isBlank()) sortBy = "name";

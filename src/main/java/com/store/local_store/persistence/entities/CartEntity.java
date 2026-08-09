@@ -21,9 +21,18 @@ public class CartEntity {
     private Long id;
 
     @OneToOne(optional = false)
-    @JoinColumn(nullable = false, updatable = false)
+    @JoinColumn(name = "user_id", unique = true, nullable = false, updatable = false)
     private UserEntity user;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cart")
-    private Set<CartItemEntity> cartItems = new HashSet<>();
+    private Set<CartItemEntity> items = new HashSet<>();
+
+    public static CartEntity create(UserEntity userEntity) {
+        return new CartEntity(null, userEntity, new HashSet<>());
+    }
+
+    public void addItem(CartItemEntity cartItem){
+        this.items.add(cartItem);
+        cartItem.setCart(this);
+    }
 }

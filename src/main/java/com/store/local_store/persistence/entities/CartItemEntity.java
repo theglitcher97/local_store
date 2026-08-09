@@ -21,10 +21,10 @@ public class CartItemEntity {
     @JoinColumn(updatable = false, nullable = false)
     private CartEntity cart;
 
-    @OneToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(updatable = false, nullable = false)
+    @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "product_id", updatable = false, nullable = false)
     private ProductEntity product;
 
     @Column(nullable = false)
-    private Long quantity;
+    private Integer quantity;
 }

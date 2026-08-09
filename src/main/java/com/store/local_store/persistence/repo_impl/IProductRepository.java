@@ -8,11 +8,14 @@ import com.store.local_store.persistence.mapper.PageResultMapper;
 import com.store.local_store.persistence.mapper.ProductMapper;
 import com.store.local_store.persistence.repositories.ProductEntityRepository;
 import com.store.local_store.web.enums.SORT_DIR;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 @AllArgsConstructor
@@ -40,5 +43,14 @@ public class IProductRepository implements ProductRepository {
                 .map(entity -> this.productMapper.entityToModel(entity));
 
         return this.pageResultMapper.toPageResult(productPage);
+    }
+
+    @Override
+    public Product findProduct(Long productId) {
+        Optional<ProductEntity> optionalProduct = this.productRepository.findById(productId);
+        if (optionalProduct.isEmpty())
+            throw new EntityNotFoundException("Cannot find product with id: "+productId);
+
+        return this.productMapper.entityToModel(optionalProduct.get());
     }
 }

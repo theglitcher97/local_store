@@ -1,8 +1,10 @@
 package com.store.local_store.web.dtos;
 
+import java.math.BigDecimal;
+
 public record CreateProductRequest(
         String name,
-        Double price,
+        BigDecimal price,
         Integer quantity,
         Long categoryId
 ) {

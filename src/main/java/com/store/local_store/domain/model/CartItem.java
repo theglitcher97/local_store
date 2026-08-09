@@ -7,7 +7,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class CartItem {
     private Long id;
-    private String email;
+    private Product product;
+    private Integer quantity;
+
+    public void increaseQuantity() {
+        quantity++;
+    }
 }

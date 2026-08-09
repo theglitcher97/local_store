@@ -9,6 +9,5 @@ import org.mapstruct.Mapping;
 public interface CategoryMapper {
     Category entityToModel(CategoryEntity categoryEntity);
 
-    @Mapping(target = "products", ignore = true)
     CategoryEntity modelToEntity(Category category);
 }

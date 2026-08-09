@@ -28,8 +28,7 @@ public class UserEntity implements UserDetails {
     private String password;
     private String role;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    @JoinColumn(updatable = false)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private CartEntity cart;
 
     @Override
@@ -48,7 +47,7 @@ public class UserEntity implements UserDetails {
         userEntity.setPassword(password);
         userEntity.setRole(role);
 
-        CartEntity cartEntity = new CartEntity(null, userEntity, new HashSet<>());
+        CartEntity cartEntity = CartEntity.create(userEntity);
         userEntity.setCart(cartEntity);
         return userEntity;
     }

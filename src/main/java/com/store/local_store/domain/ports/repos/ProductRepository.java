@@ -9,4 +9,6 @@ public interface ProductRepository {
     Long create(Product product);
 
     PageResult<Product> list(Integer page, Integer size, String sortBy, SORT_DIR sortDir);
+
+    Product findProduct(Long aLong);
 }
