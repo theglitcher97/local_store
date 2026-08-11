@@ -1,12 +1,12 @@
 package com.store.local_store.application.use_cases;
 
+import com.store.local_store.application.mappers.ProductAppMapper;
 import com.store.local_store.application.model.CreateProductCommand;
 import com.store.local_store.domain.common.PageResult;
 import com.store.local_store.domain.model.Category;
 import com.store.local_store.domain.model.Product;
 import com.store.local_store.domain.services.CategoryService;
 import com.store.local_store.domain.services.ProductService;
-import com.store.local_store.persistence.mapper.ProductMapper;
 import com.store.local_store.web.dtos.ProductDTO;
 import com.store.local_store.web.enums.SORT_DIR;
 import lombok.AllArgsConstructor;
@@ -21,7 +21,7 @@ import java.util.List;
 public class ProductUseCases {
     private ProductService productService;
     private CategoryService categoryService;
-    private ProductMapper productMapper;
+    private ProductAppMapper productMapper;
 
     @Transactional
     public ProductDTO createProduct(CreateProductCommand createProduct) {
