@@ -24,6 +24,12 @@ public class CartRestController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/checkout")
+    public ResponseEntity<Void> checkout(@AuthenticationPrincipal String userId) {
+        this.cartUseCases.checkout(Long.parseLong(userId));
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping
     public ResponseEntity<CartDTO> getCart(@AuthenticationPrincipal String userId) {
         CartDTO cartDTO = this.cartUseCases.getCart(Long.parseLong(userId));

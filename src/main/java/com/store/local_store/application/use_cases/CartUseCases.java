@@ -3,6 +3,7 @@ package com.store.local_store.application.use_cases;
 import com.store.local_store.application.mappers.CartItemAppMapper;
 import com.store.local_store.application.model.AddProductToCartCommand;
 import com.store.local_store.domain.model.Cart;
+import com.store.local_store.domain.model.CartItem;
 import com.store.local_store.domain.model.Product;
 import com.store.local_store.domain.ports.repos.CartRepository;
 import com.store.local_store.domain.ports.repos.ProductRepository;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @AllArgsConstructor
@@ -42,5 +44,31 @@ public class CartUseCases {
                 .reduce(BigDecimal::add)
                 .orElse(BigDecimal.ZERO);
         return new CartDTO(cart.getId(), items, totalPrice);
+    }
+
+    @Transactional()
+    public void checkout(long userId) {
+        Cart cart = this.cartRepository.findCartForUser(userId);
+        boolean hasInsufficientStock = cart.getItems().stream()
+                .anyMatch(item -> !item.getProduct().hasEnoughStock(item.getQuantity()));
+
+        if (hasInsufficientStock)
+            // later throw custom exception
+            // what should happen to a product (in cart) if it no longer has stock ?
+            throw new RuntimeException("At least one of the products have not enough stock!");
+
+
+        // decrease product stock
+        cart.getItems().forEach(item -> {
+            item.getProduct().decreaseStock(item.getQuantity());
+        });
+        List<Product> productsToUpdate = cart.getItems().stream().map(CartItem::getProduct).collect(Collectors.toList());
+
+        // should I do this after saving the cart, so the cart will automatically
+        // update the products and save again ?
+        cart.clear();
+
+        this.cartRepository.save(cart);
+        this.productRepository.saveAll(productsToUpdate);
     }
 }

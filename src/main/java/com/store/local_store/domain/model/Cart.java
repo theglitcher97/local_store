@@ -36,4 +36,8 @@ public class Cart {
                 .filter(i -> Objects.equals(i.getProduct().getId(), product.getId()))
                 .findFirst();
     }
+
+    public void clear() {
+        this.items.clear();
+    }
 }

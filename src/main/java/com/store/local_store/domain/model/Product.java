@@ -21,4 +21,14 @@ public class Product {
         // should accept empty name, zero price, zero stockQuantity or no category ?
         return new Product(null, name, price, stockQuantity, category);
     }
+
+    public boolean hasEnoughStock(Integer quantity) {
+        return stockQuantity >= quantity;
+    }
+
+    public void decreaseStock(Integer quantity) {
+        stockQuantity -= quantity;
+        if (stockQuantity < 0)
+            stockQuantity = 0;
+    }
 }

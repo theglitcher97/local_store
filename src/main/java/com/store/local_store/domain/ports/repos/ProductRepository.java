@@ -4,6 +4,8 @@ import com.store.local_store.domain.common.PageResult;
 import com.store.local_store.domain.model.Product;
 import com.store.local_store.web.enums.SORT_DIR;
 
+import java.util.List;
+
 public interface ProductRepository {
 
     Long create(Product product);
@@ -11,4 +13,6 @@ public interface ProductRepository {
     PageResult<Product> list(Integer page, Integer size, String sortBy, SORT_DIR sortDir);
 
     Product findProduct(Long aLong);
+
+    void saveAll(List<Product> productsToUpdate);
 }

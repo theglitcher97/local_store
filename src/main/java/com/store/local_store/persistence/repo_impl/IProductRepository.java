@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -26,7 +27,7 @@ public class IProductRepository implements ProductRepository {
 
     @Override
     public Long create(Product product) {
-        ProductEntity productEntity = this.productMapper.modelToEntity(product);
+        ProductEntity productEntity = this.productMapper.toEntity(product);
         productEntity =  this.productRepository.save(productEntity);
         return productEntity.getId();
     }
@@ -52,5 +53,10 @@ public class IProductRepository implements ProductRepository {
             throw new EntityNotFoundException("Cannot find product with id: "+productId);
 
         return this.productMapper.entityToModel(optionalProduct.get());
+    }
+
+    @Override
+    public void saveAll(List<Product> productsToUpdate) {
+        this.productRepository.saveAll(this.productMapper.toEntities(productsToUpdate));
     }
 }

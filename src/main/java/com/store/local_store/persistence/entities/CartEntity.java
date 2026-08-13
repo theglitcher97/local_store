@@ -24,7 +24,7 @@ public class CartEntity {
     @JoinColumn(name = "user_id", unique = true, nullable = false, updatable = false)
     private UserEntity user;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cart")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cart", orphanRemoval = true)
     private Set<CartItemEntity> items = new HashSet<>();
 
     public static CartEntity create(UserEntity userEntity) {
