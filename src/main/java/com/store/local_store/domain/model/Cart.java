@@ -40,4 +40,17 @@ public class Cart {
     public void clear() {
         this.items.clear();
     }
+
+    public void removeProduct(Product product) {
+        Optional<CartItem> cartItem = items.stream()
+                .filter(i -> Objects.equals(i.getProduct().getId(), product.getId()))
+                .findFirst();
+
+        if (cartItem.isEmpty())
+            return;
+
+        cartItem.get().reduceProductAmount();
+        if (cartItem.get().isEmpty())
+            this.items.remove(cartItem.get());
+    }
 }

@@ -15,4 +15,15 @@ public class CartItem {
     public void increaseQuantity() {
         quantity++;
     }
+
+    public void reduceProductAmount() {
+        if (quantity <= 0)
+            throw new RuntimeException("CartItem quantity cannot be zero or less before calling this method");
+
+        quantity--;
+    }
+
+    public boolean isEmpty() {
+        return quantity == 0;
+    }
 }

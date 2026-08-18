@@ -1,16 +1,14 @@
 package com.store.local_store.web.rest;
 
 import com.store.local_store.application.model.AddProductToCartCommand;
+import com.store.local_store.application.model.RemoveProductFromCartCommand;
 import com.store.local_store.application.use_cases.CartUseCases;
 import com.store.local_store.web.dtos.CartDTO;
 import jakarta.websocket.server.PathParam;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/v1/cart")
@@ -34,5 +32,11 @@ public class CartRestController {
     public ResponseEntity<CartDTO> getCart(@AuthenticationPrincipal String userId) {
         CartDTO cartDTO = this.cartUseCases.getCart(Long.parseLong(userId));
         return ResponseEntity.ok(cartDTO);
+    }
+
+    @DeleteMapping("/products")
+    public ResponseEntity<Void> removeProduct(@AuthenticationPrincipal String userId, @PathParam("productId") Long productId) {
+        this.cartUseCases.removeProduct(new RemoveProductFromCartCommand(Long.parseLong(userId), productId));
+        return ResponseEntity.noContent().build();
     }
 }

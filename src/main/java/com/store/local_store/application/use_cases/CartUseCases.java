@@ -2,6 +2,7 @@ package com.store.local_store.application.use_cases;
 
 import com.store.local_store.application.mappers.CartItemAppMapper;
 import com.store.local_store.application.model.AddProductToCartCommand;
+import com.store.local_store.application.model.RemoveProductFromCartCommand;
 import com.store.local_store.domain.model.Cart;
 import com.store.local_store.domain.model.CartItem;
 import com.store.local_store.domain.model.Product;
@@ -70,5 +71,13 @@ public class CartUseCases {
 
         this.cartRepository.save(cart);
         this.productRepository.saveAll(productsToUpdate);
+    }
+
+    @Transactional
+    public void removeProduct(RemoveProductFromCartCommand command) {
+        Cart cart = this.cartRepository.findCartForUser(command.userId());
+        Product product = this.productRepository.findProduct(command.productId());
+        cart.removeProduct(product);
+        this.cartRepository.save(cart);
     }
 }
