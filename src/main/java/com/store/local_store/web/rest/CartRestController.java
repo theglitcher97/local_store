@@ -35,8 +35,10 @@ public class CartRestController {
     }
 
     @DeleteMapping("/products")
-    public ResponseEntity<Void> removeProduct(@AuthenticationPrincipal String userId, @PathParam("productId") Long productId) {
-        this.cartUseCases.removeProduct(new RemoveProductFromCartCommand(Long.parseLong(userId), productId));
+    public ResponseEntity<Void> removeProduct(@AuthenticationPrincipal String userId,
+                                              @PathParam("productId") Long productId,
+                                              @PathParam("removeAll") Boolean removeAll) {
+        this.cartUseCases.removeProduct(new RemoveProductFromCartCommand(Long.parseLong(userId), productId, removeAll));
         return ResponseEntity.noContent().build();
     }
 }

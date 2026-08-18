@@ -16,7 +16,7 @@ public class CartItem {
         quantity++;
     }
 
-    public void reduceProductAmount() {
+    public void reduceProductquantity() {
         if (quantity <= 0)
             throw new RuntimeException("CartItem quantity cannot be zero or less before calling this method");
 

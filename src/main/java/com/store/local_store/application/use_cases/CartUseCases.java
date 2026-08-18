@@ -77,7 +77,9 @@ public class CartUseCases {
     public void removeProduct(RemoveProductFromCartCommand command) {
         Cart cart = this.cartRepository.findCartForUser(command.userId());
         Product product = this.productRepository.findProduct(command.productId());
-        cart.removeProduct(product);
+
+        if (command.removeAll()) cart.removeFromCart(product);
+        else cart.reduceProductQuantity(product);
         this.cartRepository.save(cart);
     }
 }

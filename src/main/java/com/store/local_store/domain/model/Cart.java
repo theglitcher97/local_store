@@ -41,16 +41,23 @@ public class Cart {
         this.items.clear();
     }
 
-    public void removeProduct(Product product) {
-        Optional<CartItem> cartItem = items.stream()
-                .filter(i -> Objects.equals(i.getProduct().getId(), product.getId()))
-                .findFirst();
+    public void reduceProductQuantity(Product product) {
+        Optional<CartItem> cartItem = this.findCartItemByProduct(product);
 
         if (cartItem.isEmpty())
             return;
 
-        cartItem.get().reduceProductAmount();
+        cartItem.get().reduceProductquantity();
         if (cartItem.get().isEmpty())
             this.items.remove(cartItem.get());
+    }
+
+    public void removeFromCart(Product product) {
+        Optional<CartItem> cartItem = this.findCartItemByProduct(product);
+
+        if (cartItem.isEmpty())
+            return;
+
+        this.items.remove(cartItem.get());
     }
 }
