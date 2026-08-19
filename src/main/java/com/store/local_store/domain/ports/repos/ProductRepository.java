@@ -15,4 +15,6 @@ public interface ProductRepository {
     Product findProduct(Long aLong);
 
     void saveAll(List<Product> productsToUpdate);
+
+    Integer updateProductStock(Integer quantity, Long productId);
 }

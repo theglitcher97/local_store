@@ -15,7 +15,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -50,27 +52,17 @@ public class CartUseCases {
     @Transactional()
     public void checkout(long userId) {
         Cart cart = this.cartRepository.findCartForUser(userId);
-        boolean hasInsufficientStock = cart.getItems().stream()
-                .anyMatch(item -> !item.getProduct().hasEnoughStock(item.getQuantity()));
+        cart.getItems()
+                .stream().sorted(Comparator.comparing(item -> item.getProduct().getId()))
+                .toList()
+                .forEach(item -> {
+                    Integer rowsAffected = this.productRepository.updateProductStock(item.getQuantity(), item.getProduct().getId());
+                    if (rowsAffected == 0)
+                        throw new RuntimeException("Not enough stock for product: "+item.getProduct().getName());
+                });
 
-        if (hasInsufficientStock)
-            // later throw custom exception
-            // what should happen to a product (in cart) if it no longer has stock ?
-            throw new RuntimeException("At least one of the products have not enough stock!");
-
-
-        // decrease product stock
-        cart.getItems().forEach(item -> {
-            item.getProduct().decreaseStock(item.getQuantity());
-        });
-        List<Product> productsToUpdate = cart.getItems().stream().map(CartItem::getProduct).collect(Collectors.toList());
-
-        // should I do this after saving the cart, so the cart will automatically
-        // update the products and save again ?
         cart.clear();
-
         this.cartRepository.save(cart);
-        this.productRepository.saveAll(productsToUpdate);
     }
 
     @Transactional

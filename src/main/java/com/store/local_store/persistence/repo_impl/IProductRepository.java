@@ -8,7 +8,9 @@ import com.store.local_store.persistence.mapper.PageResultMapper;
 import com.store.local_store.persistence.mapper.ProductMapper;
 import com.store.local_store.persistence.repositories.ProductEntityRepository;
 import com.store.local_store.web.enums.SORT_DIR;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.Query;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +26,7 @@ public class IProductRepository implements ProductRepository {
     private ProductEntityRepository productRepository;
     private ProductMapper productMapper;
     private PageResultMapper pageResultMapper;
+    private EntityManager entityManager;
 
     @Override
     public Long create(Product product) {
@@ -58,5 +61,17 @@ public class IProductRepository implements ProductRepository {
     @Override
     public void saveAll(List<Product> productsToUpdate) {
         this.productRepository.saveAll(this.productMapper.toEntities(productsToUpdate));
+    }
+
+    public Integer updateProductStock(Integer quantity, Long productId) {
+        Query query = this.entityManager.createNativeQuery("UPDATE products \n" +
+                "SET stock_quantity = stock_quantity - :quantity \n" +
+                "WHERE id = :productId \n" +
+                "AND stock_quantity >= :quantity");
+
+        query.setParameter("quantity", quantity)
+                .setParameter("productId", productId);
+
+        return query.executeUpdate();
     }
 }
