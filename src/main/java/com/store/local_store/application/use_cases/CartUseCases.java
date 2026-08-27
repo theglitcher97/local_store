@@ -3,15 +3,14 @@ package com.store.local_store.application.use_cases;
 import com.store.local_store.application.mappers.CartItemAppMapper;
 import com.store.local_store.application.model.AddProductToCartCommand;
 import com.store.local_store.application.model.RemoveProductFromCartCommand;
-import com.store.local_store.domain.model.Cart;
-import com.store.local_store.domain.model.Order;
-import com.store.local_store.domain.model.OrderItem;
-import com.store.local_store.domain.model.Product;
+import com.store.local_store.domain.model.*;
 import com.store.local_store.domain.ports.repos.CartRepository;
 import com.store.local_store.domain.ports.repos.OrderRepository;
 import com.store.local_store.domain.ports.repos.ProductRepository;
 import com.store.local_store.web.dtos.CartDTO;
 import com.store.local_store.web.dtos.CartItemDTO;
+import com.store.local_store.web.exceptions.custom.EmptyCartException;
+import com.store.local_store.web.exceptions.custom.InsufficientStockException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +37,8 @@ public class CartUseCases {
 
     public CartDTO getCart(long userId) {
         Cart cart = this.cartRepository.findCartForUser(userId);
+        List<CartItem> items = cart.getItems().stream().sorted(Comparator.comparing(CartItem::getId)).toList();
+        cart.setItems(items);
         return this.toCartDTO(cart);
     }
 
@@ -51,15 +52,18 @@ public class CartUseCases {
     public void checkout(long userId) {
         Cart cart = this.cartRepository.findCartForUser(userId);
 
-        // validate if cart have items before checking out
+        if (cart.getItems().isEmpty()) {
+            throw new EmptyCartException("Cart is empty");
+        }
 
         cart.getItems()
                 .stream().sorted(Comparator.comparing(item -> item.getProduct().getId()))
                 .forEach(item -> {
                     Integer rowsAffected = this.productRepository.updateProductStock(item.getQuantity(), item.getProduct().getId());
                     if (rowsAffected == 0)
-                        // replace by InsufficientStockException(productId, productName, quantityRequired)
-                        throw new RuntimeException("Not enough stock for product: "+item.getProduct().getName());
+                        throw new InsufficientStockException(
+                                "Not enough stock for product: "+item.getProduct().getName() +
+                                "; required quantity: "+item.getQuantity());
                 });
 
         List<OrderItem> orderItems = cart.getItems().stream().map(OrderItem::create).toList();
