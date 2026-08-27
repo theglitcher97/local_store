@@ -10,5 +10,8 @@ public interface UserMapper {
     User entityToModel(UserEntity userEntity);
 
     @Mapping(target = "cart", ignore = true)
+    @Mapping(target = "password", ignore = true)
+    @Mapping(target = "role", ignore = true)
+    @Mapping(target = "authorities", ignore = true)
     UserEntity toEntity(User user);
 }

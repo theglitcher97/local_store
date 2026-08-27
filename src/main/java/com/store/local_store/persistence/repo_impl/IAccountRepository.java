@@ -29,11 +29,6 @@ public class IAccountRepository implements AccountRepository, UserDetailsService
         // create and save account
         UserEntity userEntity =  UserEntity.create(email, this.passwordEncoder.encode(password), "ROLE_CUSTOMER");
         this.userRepository.save(userEntity);
-
-        // link cart
-//        CartEntity cart = new CartEntity(null, userEntity, new HashSet<>());
-//        userEntity.setCart(cart);
-//        this.userRepository.save(userEntity);
     }
 
     @Override

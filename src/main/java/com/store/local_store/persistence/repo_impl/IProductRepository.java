@@ -63,7 +63,7 @@ public class IProductRepository implements ProductRepository {
         this.productRepository.saveAll(this.productMapper.toEntities(productsToUpdate));
     }
 
-    public Integer updateProductStock(Integer quantity, Long productId) {
+    public Integer updateProductStock(Long quantity, Long productId) {
         Query query = this.entityManager.createNativeQuery("UPDATE products \n" +
                 "SET stock_quantity = stock_quantity - :quantity \n" +
                 "WHERE id = :productId \n" +

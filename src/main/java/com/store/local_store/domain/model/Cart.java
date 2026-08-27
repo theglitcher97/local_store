@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -23,7 +24,7 @@ public class Cart {
     public void addProduct(Product product) {
         Optional<CartItem> optCartItem = findCartItemByProduct(product);
         if (optCartItem.isEmpty()) {
-            CartItem cartItem = new CartItem(null, product, 1);
+            CartItem cartItem = new CartItem(null, product, 1L);
             items.add(cartItem);
         }
         else {
@@ -47,7 +48,7 @@ public class Cart {
         if (cartItem.isEmpty())
             return;
 
-        cartItem.get().reduceProductquantity();
+        cartItem.get().reduceProductQuantity();
         if (cartItem.get().isEmpty())
             this.items.remove(cartItem.get());
     }
@@ -59,5 +60,11 @@ public class Cart {
             return;
 
         this.items.remove(cartItem.get());
+    }
+
+    public BigDecimal getTotalPrice() {
+        return this.getItems().stream()
+                .map(CartItem::getSubtotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

@@ -9,7 +9,10 @@ import org.mapstruct.Mapping;
 public interface CartMapper {
     Cart toModel(CartEntity cartEntity);
 
+    @Mapping(target = "user", ignore = true)
     CartEntity toEntity(Cart cart);
+
+    @Mapping(target = "user", ignore = true)
     @Mapping(target = "items", ignore = true)
     CartEntity toEntityNoItems(Cart cart);
 }
