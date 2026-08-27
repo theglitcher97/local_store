@@ -25,7 +25,7 @@ public class ICartRepository implements CartRepository {
     public Cart findCartForUser(Long userId) {
         Optional<CartEntity> optionalCart = this.cartRepository.findByUserId(userId);
         if (optionalCart.isEmpty())
-            throw new EntityNotFoundException("Cannot find cart for user with id: "+userId);
+            throw new EntityNotFoundException("Cannot find cart for user with productId: "+userId);
 
         return this.cartMapper.toModel(optionalCart.get());
     }

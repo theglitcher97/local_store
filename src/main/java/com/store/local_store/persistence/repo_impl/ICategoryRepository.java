@@ -18,6 +18,6 @@ public class ICategoryRepository implements CategoryRepository {
     public Category findCategory(Long categoryId) {
         return this.categoryRepository.findById(categoryId)
                 .map(entity -> this.categoryMapper.entityToModel(entity))
-                .orElseThrow(() -> new EntityNotFoundException("Cannot find category with id: "+categoryId));
+                .orElseThrow(() -> new EntityNotFoundException("Cannot find category with productId: "+categoryId));
     }
 }

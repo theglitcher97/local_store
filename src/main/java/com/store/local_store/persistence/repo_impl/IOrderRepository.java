@@ -22,7 +22,7 @@ public class IOrderRepository implements OrderRepository {
     @Override
     public void create(Order order) {
         UserEntity user = this.userRepository.findById(order.getUserId())
-                .orElseThrow(() -> new EntityNotFoundException("Cannot find user for order; user id:" +order.getUserId()));
+                .orElseThrow(() -> new EntityNotFoundException("Cannot find user for order; user productId:" +order.getUserId()));
 
         OrderEntity orderEntity = this.toEntity(order, user);
         this.orderRepository.save(orderEntity);

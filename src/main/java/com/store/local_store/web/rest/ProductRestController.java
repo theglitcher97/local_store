@@ -1,10 +1,12 @@
 package com.store.local_store.web.rest;
 
 import com.store.local_store.application.model.CreateProductCommand;
+import com.store.local_store.application.model.UpdateProductCommand;
 import com.store.local_store.application.use_cases.ProductUseCases;
 import com.store.local_store.domain.common.PageResult;
 import com.store.local_store.web.dtos.CreateProductRequest;
 import com.store.local_store.web.dtos.ProductDTO;
+import com.store.local_store.web.dtos.UpdateProductRequest;
 import com.store.local_store.web.enums.SORT_DIR;
 import jakarta.websocket.server.PathParam;
 import lombok.AllArgsConstructor;
@@ -56,5 +58,22 @@ public class ProductRestController {
 
         PageResult<ProductDTO> products = this.productUseCases.listProducts(page, size, sortBy, sortDir);
         return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id, @RequestBody UpdateProductRequest product) {
+        // validate incoming data
+        if ((product.name() != null && product.name().isBlank()) ||
+                (product.price() != null && product.price().compareTo(BigDecimal.ZERO) <= 0) ||
+                (product.quantity() != null && product.quantity() <= 0))
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        // create product command
+        UpdateProductCommand createProductCommand =  new UpdateProductCommand(id, product.name(), product.price(), product.quantity());
+
+        // update product
+        ProductDTO productDTO = this.productUseCases.updateProduct(createProductCommand);
+        return new ResponseEntity<>(productDTO, HttpStatus.OK);
     }
 }

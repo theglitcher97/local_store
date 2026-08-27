@@ -12,9 +12,11 @@ public interface ProductRepository {
 
     PageResult<Product> list(Integer page, Integer size, String sortBy, SORT_DIR sortDir);
 
-    Product findProduct(Long aLong);
+    Product findProduct(Long id);
 
     void saveAll(List<Product> productsToUpdate);
 
     Integer updateProductStock(Long quantity, Long productId);
+
+    void save(Product product);
 }

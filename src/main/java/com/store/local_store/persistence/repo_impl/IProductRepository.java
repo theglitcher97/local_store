@@ -53,7 +53,7 @@ public class IProductRepository implements ProductRepository {
     public Product findProduct(Long productId) {
         Optional<ProductEntity> optionalProduct = this.productRepository.findById(productId);
         if (optionalProduct.isEmpty())
-            throw new EntityNotFoundException("Cannot find product with id: "+productId);
+            throw new EntityNotFoundException("Cannot find product with productId: "+productId);
 
         return this.productMapper.entityToModel(optionalProduct.get());
     }
@@ -73,5 +73,10 @@ public class IProductRepository implements ProductRepository {
                 .setParameter("productId", productId);
 
         return query.executeUpdate();
+    }
+
+    @Override
+    public void save(Product product) {
+        this.productRepository.save(this.productMapper.toEntity(product));
     }
 }
