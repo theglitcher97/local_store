@@ -30,9 +30,4 @@ public class OrderEntity {
 
     @Column(updatable = false, nullable = false)
     private BigDecimal total;
-
-    public void addItem(OrderItemEntity orderItem){
-        this.items.add(orderItem);
-        orderItem.setOrder(this);
-    }
 }

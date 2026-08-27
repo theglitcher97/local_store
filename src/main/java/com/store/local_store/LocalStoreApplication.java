@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @SpringBootApplication
 public class LocalStoreApplication {
@@ -48,8 +49,11 @@ public class LocalStoreApplication {
 			CategoryEntity categoryEntity = new CategoryEntity(null, "technology");
 			categoryRepository.save(categoryEntity);
 
-			ProductEntity productEntity = new ProductEntity(null, "laptop", new BigDecimal("1500"), 100, categoryEntity);
-			productRepository.save(productEntity);
+			productRepository.saveAll(List.of(
+                    new ProductEntity(null, "laptop", new BigDecimal("1500"), 100, categoryEntity),
+                    new ProductEntity(null, "pants", new BigDecimal("50"), 100, categoryEntity),
+                    new ProductEntity(null, "bed", new BigDecimal("250"), 100, categoryEntity)
+            ));
 		};
 	}
 
