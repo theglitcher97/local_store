@@ -5,7 +5,7 @@ import java.util.List;
 
 public record  CartDTO(
         Long id,
-        List<CartItemDTO> item,
+        List<CartItemDTO> items,
         BigDecimal totalPrice
 ) {
 }
