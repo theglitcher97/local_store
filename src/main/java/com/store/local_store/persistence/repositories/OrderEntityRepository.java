@@ -7,9 +7,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface OrderEntityRepository extends JpaRepository<OrderEntity, Long> {
     @Query(value = "SELECT oe FROM OrderEntity oe WHERE oe.user.id = :userId")
     List<OrderEntity> findAllByUser(@Param("userId") long userId);
+
+    @Query(value = "SELECT oe FROM OrderEntity oe WHERE oe.id = :id AND oe.user.id = :userId ")
+    Optional<OrderEntity> findByIdAndUserId(@Param("id") Long id,@Param("userId") long userId);
 }

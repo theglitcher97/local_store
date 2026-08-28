@@ -8,4 +8,6 @@ public interface OrderRepository {
     void create(Order order);
 
     List<Order> findAll(long userId);
+
+    Order findByIdAndUserId(Long id, long userId);
 }

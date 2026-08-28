@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
@@ -36,6 +37,12 @@ public class IOrderRepository implements OrderRepository {
     public List<Order> findAll(long userId) {
         List<OrderEntity> orderEntities = this.orderRepository.findAllByUser(userId);
         return this.orderMapper.toModel(orderEntities);
+    }
+
+    @Override
+    public Order findByIdAndUserId(Long id, long userId) {
+        Optional<OrderEntity> optionalOrder = this.orderRepository.findByIdAndUserId(id, userId);
+        return optionalOrder.map(orderEntity -> this.orderMapper.toModel(orderEntity)).orElse(null);
     }
 
     private OrderEntity toEntity(Order order, UserEntity userEntity) {
