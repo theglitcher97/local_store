@@ -6,16 +6,20 @@ import com.store.local_store.domain.ports.repos.OrderRepository;
 import com.store.local_store.persistence.entities.OrderEntity;
 import com.store.local_store.persistence.entities.UserEntity;
 import com.store.local_store.persistence.mapper.OrderItemMapper;
+import com.store.local_store.persistence.mapper.OrderMapper;
 import com.store.local_store.persistence.repositories.OrderEntityRepository;
 import com.store.local_store.persistence.repositories.UserEntityRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 @AllArgsConstructor
 public class IOrderRepository implements OrderRepository {
     private OrderEntityRepository orderRepository;
+    private OrderMapper orderMapper;
     private OrderItemMapper orderItemMapper;
     private UserEntityRepository userRepository;
 
@@ -26,6 +30,12 @@ public class IOrderRepository implements OrderRepository {
 
         OrderEntity orderEntity = this.toEntity(order, user);
         this.orderRepository.save(orderEntity);
+    }
+
+    @Override
+    public List<Order> findAll(long userId) {
+        List<OrderEntity> orderEntities = this.orderRepository.findAllByUser(userId);
+        return this.orderMapper.toModel(orderEntities);
     }
 
     private OrderEntity toEntity(Order order, UserEntity userEntity) {
