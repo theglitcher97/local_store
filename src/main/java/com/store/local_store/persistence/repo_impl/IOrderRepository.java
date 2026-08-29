@@ -46,6 +46,13 @@ public class IOrderRepository implements OrderRepository {
         return optionalOrder.map(orderEntity -> this.orderMapper.toModel(orderEntity)).orElse(null);
     }
 
+    @Override
+    public List<Order> findAllWithState(long userId, String state) {
+        OrderState orderState = OrderState.valueOf(state);
+        List<OrderEntity> orderEntities = this.orderRepository.findAllByUserAndState(userId, orderState);
+        return this.orderMapper.toModel(orderEntities);
+    }
+
     private OrderEntity toEntity(Order order, UserEntity userEntity) {
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setUser(userEntity);

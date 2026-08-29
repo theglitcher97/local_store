@@ -12,11 +12,16 @@ import java.util.List;
 public class OrderService {
     private OrderRepository orderRepository;
 
+    public Order findOrder(Long id, long userId) {
+        return this.orderRepository.findByIdAndUserId(id, userId);
+    }
+
     public List<Order> findAll(long userId) {
         return this.orderRepository.findAll(userId);
     }
 
-    public Order findOrder(Long id, long userId) {
-        return this.orderRepository.findByIdAndUserId(id, userId);
+    public List<Order> findAll(long userId, String state) {
+        return this.orderRepository.findAllWithState(userId, state);
+
     }
 }

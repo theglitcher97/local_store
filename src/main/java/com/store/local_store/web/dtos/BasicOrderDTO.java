@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 public record BasicOrderDTO(
         Long id,
         Integer items,
-        BigDecimal totalPrice
+        BigDecimal totalPrice,
+        String state
 ) {
 }

@@ -10,4 +10,6 @@ public interface OrderRepository {
     List<Order> findAll(long userId);
 
     Order findByIdAndUserId(Long id, long userId);
+
+    List<Order> findAllWithState(long userId, String state);
 }

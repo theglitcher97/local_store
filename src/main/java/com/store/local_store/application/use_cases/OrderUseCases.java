@@ -9,6 +9,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -18,10 +19,14 @@ import java.util.Objects;
 public class OrderUseCases {
     private OrderService orderService;
 
-    public List<BasicOrderDTO> findAllOrder(long userId) {
-        List<Order> orders = this.orderService.findAll(userId);
+    public List<BasicOrderDTO> findOrders(long userId, String state) {
+        List<Order> orders;
+        if (Objects.isNull(state) || state.equals("ALL"))
+            orders = this.orderService.findAll(userId);
+        else
+            orders = this.orderService.findAll(userId, state);
         return orders.stream()
-                .map(order -> new BasicOrderDTO(order.getId(), order.getItems().size(), order.getTotal()))
+                .map(order -> new BasicOrderDTO(order.getId(), order.getItems().size(), order.getTotal(), order.getState()))
                 // lower to bigger -> (reversed) bigger to lower
                 .sorted(Comparator.comparing(BasicOrderDTO::id, Comparator.reverseOrder()))
                 .toList();
