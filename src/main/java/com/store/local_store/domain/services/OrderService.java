@@ -24,4 +24,8 @@ public class OrderService {
         return this.orderRepository.findAllWithState(userId, state);
 
     }
+
+    public void save(Order order) {
+        this.orderRepository.save(order);
+    }
 }

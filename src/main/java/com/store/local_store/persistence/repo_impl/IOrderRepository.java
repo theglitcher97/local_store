@@ -53,6 +53,13 @@ public class IOrderRepository implements OrderRepository {
         return this.orderMapper.toModel(orderEntities);
     }
 
+    @Override
+    public void save(Order order) {
+        OrderEntity orderEntity = this.orderMapper.toEntity(order);
+        orderEntity.setState(OrderState.valueOf(order.getState()));
+        this.orderRepository.save(orderEntity);
+    }
+
     private OrderEntity toEntity(Order order, UserEntity userEntity) {
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setUser(userEntity);

@@ -1,5 +1,6 @@
 package com.store.local_store.application.use_cases;
 
+import com.store.local_store.application.model.CancelOrderCommand;
 import com.store.local_store.domain.model.Order;
 import com.store.local_store.domain.services.OrderService;
 import com.store.local_store.web.dtos.BasicOrderDTO;
@@ -43,5 +44,11 @@ public class OrderUseCases {
                 .toList();
 
         return new FullOrderDTO(order.getId(), itemDTOS, order.getTotal());
+    }
+
+    public void cancelOrder(CancelOrderCommand command) {
+        Order order = this.orderService.findOrder(command.orderId(), command.userId());
+        order.cancel();
+        this.orderService.save(order);
     }
 }

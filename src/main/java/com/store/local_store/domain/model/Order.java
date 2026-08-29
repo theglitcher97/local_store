@@ -26,4 +26,10 @@ public class Order {
         order.setState("PENDING");
         return order;
     }
+
+    public void cancel() {
+        if (!state.equalsIgnoreCase("pending"))
+            throw new RuntimeException("Cannot cancel an order if is not pending");
+        state = "CANCELLED";
+    }
 }

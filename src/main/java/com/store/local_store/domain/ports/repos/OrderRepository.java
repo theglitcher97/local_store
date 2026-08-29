@@ -12,4 +12,6 @@ public interface OrderRepository {
     Order findByIdAndUserId(Long id, long userId);
 
     List<Order> findAllWithState(long userId, String state);
+
+    void save(Order order);
 }

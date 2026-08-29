@@ -10,6 +10,7 @@ import java.util.List;
 @Mapper(componentModel = "spring", uses = {OrderItemMapper.class})
 public interface OrderMapper {
     @Mapping(target = "user", ignore = true)
+    @Mapping(target = "state", ignore = true)
     OrderEntity toEntity(Order order);
 
     @Mapping(target = "userId", source = "user.id")
