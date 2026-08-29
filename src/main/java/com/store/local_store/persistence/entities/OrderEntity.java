@@ -1,5 +1,6 @@
 package com.store.local_store.persistence.entities;
 
+import com.store.local_store.persistence.enums.OrderState;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,6 +32,8 @@ public class OrderEntity {
     @Column(updatable = false, nullable = false)
     private BigDecimal total;
 
+    @Enumerated(EnumType.STRING)
+    private OrderState state;
 
     public void addItem(OrderItemEntity item) {
         this.items.add(item);

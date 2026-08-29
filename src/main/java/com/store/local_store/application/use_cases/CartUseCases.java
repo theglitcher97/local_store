@@ -67,7 +67,7 @@ public class CartUseCases {
                 });
 
         List<OrderItem> orderItems = cart.getItems().stream().map(OrderItem::create).toList();
-        Order order = new Order(null, userId, cart.getTotalPrice(), orderItems);
+        Order order = Order.create(userId, cart.getTotalPrice(), orderItems);
         this.orderRepository.create(order);
 
         cart.clear();

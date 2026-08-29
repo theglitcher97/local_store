@@ -15,4 +15,15 @@ public class Order {
     private Long userId;
     private BigDecimal total;
     private List<OrderItem> items;
+    private String state;
+
+
+    public static Order create(Long userId, BigDecimal totalPrice, List<OrderItem> items) {
+        Order order = new Order();
+        order.setUserId(userId);
+        order.setTotal(totalPrice);
+        order.setItems(items);
+        order.setState("PENDING");
+        return order;
+    }
 }

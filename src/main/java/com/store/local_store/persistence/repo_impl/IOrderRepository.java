@@ -5,6 +5,7 @@ import com.store.local_store.domain.model.OrderItem;
 import com.store.local_store.domain.ports.repos.OrderRepository;
 import com.store.local_store.persistence.entities.OrderEntity;
 import com.store.local_store.persistence.entities.UserEntity;
+import com.store.local_store.persistence.enums.OrderState;
 import com.store.local_store.persistence.mapper.OrderItemMapper;
 import com.store.local_store.persistence.mapper.OrderMapper;
 import com.store.local_store.persistence.repositories.OrderEntityRepository;
@@ -49,6 +50,7 @@ public class IOrderRepository implements OrderRepository {
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setUser(userEntity);
         orderEntity.setTotal(order.getTotal());
+        orderEntity.setState(OrderState.valueOf(order.getState()));
 
         for (OrderItem item : order.getItems()) {
             orderEntity.addItem(this.orderItemMapper.toEntity(item));
