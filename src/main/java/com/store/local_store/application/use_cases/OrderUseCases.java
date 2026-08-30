@@ -9,6 +9,7 @@ import com.store.local_store.web.dtos.OrderItemDTO;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -46,9 +47,10 @@ public class OrderUseCases {
         return new FullOrderDTO(order.getId(), itemDTOS, order.getTotal());
     }
 
+    @Transactional
     public void cancelOrder(CancelOrderCommand command) {
         Order order = this.orderService.findOrder(command.orderId(), command.userId());
         order.cancel();
-        this.orderService.save(order);
+        this.orderService.saveCancel(order);
     }
 }

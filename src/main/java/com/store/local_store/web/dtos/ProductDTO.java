@@ -6,7 +6,7 @@ public record ProductDTO(
         Long id,
         String name,
         BigDecimal price,
-        Integer stockQuantity,
+        Integer availableStock,
         String categoryName
 ) {
 }

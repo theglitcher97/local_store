@@ -59,7 +59,8 @@ public class CartUseCases {
         cart.getItems()
                 .stream().sorted(Comparator.comparing(item -> item.getProduct().getId()))
                 .forEach(item -> {
-                    Integer rowsAffected = this.productRepository.updateProductStock(item.getQuantity(), item.getProduct().getId());
+                    // update available stock and reserved stock
+                    Integer rowsAffected = this.productRepository.reserveProductStock(item.getQuantity(), item.getProduct().getId());
                     if (rowsAffected == 0)
                         throw new InsufficientStockException(
                                 "Not enough stock for product: "+item.getProduct().getName() +
@@ -72,6 +73,7 @@ public class CartUseCases {
 
         cart.clear();
         this.cartRepository.save(cart);
+
     }
 
     @Transactional

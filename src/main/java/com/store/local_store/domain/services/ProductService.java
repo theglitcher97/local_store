@@ -30,7 +30,7 @@ public class ProductService {
     public void update(Product product, UpdateProductCommand command) {
         if (command.name() != null) product.setName(command.name());
         if (command.price() != null) product.setPrice(command.price());
-        if (command.quantity() != null) product.setStockQuantity(command.quantity());
+        if (command.quantity() != null) product.setAvailableStock(command.quantity());
         this.productRepository.save(product);
     }
 }

@@ -23,8 +23,20 @@ public class ProductEntity {
     @Column(nullable = false, precision = 19, scale = 2)
     private BigDecimal price;
     @Column(nullable = false)
-    private Integer stockQuantity;
+    private Integer availableStock;
+    @Column(nullable = false)
+    private Integer reservedStock = 0;
+
     @ManyToOne
     @JoinColumn(nullable = false)
     private CategoryEntity category;
+
+    public static ProductEntity create(String name, BigDecimal price, int availableStock, CategoryEntity categoryEntity) {
+        ProductEntity productEntity = new ProductEntity();
+        productEntity.setAvailableStock(availableStock);
+        productEntity.setCategory(categoryEntity);
+        productEntity.setName(name);
+        productEntity.setPrice(price);
+        return productEntity;
+    }
 }

@@ -24,6 +24,7 @@ public class IOrderRepository implements OrderRepository {
     private OrderMapper orderMapper;
     private OrderItemMapper orderItemMapper;
     private UserEntityRepository userRepository;
+    private IProductRepository productRepository;
 
     @Override
     public void create(Order order) {
@@ -58,6 +59,14 @@ public class IOrderRepository implements OrderRepository {
         OrderEntity orderEntity = this.orderMapper.toEntity(order);
         orderEntity.setState(OrderState.valueOf(order.getState()));
         this.orderRepository.save(orderEntity);
+    }
+
+    @Override
+    public void saveCancel(Order order) {
+        OrderEntity orderEntity = this.orderMapper.toEntity(order);
+        orderEntity.setState(OrderState.valueOf(order.getState()));
+        this.orderRepository.save(orderEntity);
+        this.productRepository.freeReservedStock(order);
     }
 
     private OrderEntity toEntity(Order order, UserEntity userEntity) {

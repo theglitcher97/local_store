@@ -28,4 +28,8 @@ public class OrderService {
     public void save(Order order) {
         this.orderRepository.save(order);
     }
+
+    public void saveCancel(Order order) {
+        this.orderRepository.saveCancel(order);
+    }
 }

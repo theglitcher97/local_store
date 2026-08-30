@@ -13,7 +13,7 @@ public class Product {
     private Long id;
     private String name;
     private BigDecimal price;
-    private Integer stockQuantity;
+    private Integer availableStock;
     private Category category;
 
     public static Product create(String name, BigDecimal price, Integer stockQuantity, Category category) {

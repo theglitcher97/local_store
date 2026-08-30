@@ -1,6 +1,7 @@
 package com.store.local_store.persistence.repo_impl;
 
 import com.store.local_store.domain.common.PageResult;
+import com.store.local_store.domain.model.Order;
 import com.store.local_store.domain.model.Product;
 import com.store.local_store.domain.ports.repos.ProductRepository;
 import com.store.local_store.persistence.entities.ProductEntity;
@@ -63,11 +64,13 @@ public class IProductRepository implements ProductRepository {
         this.productRepository.saveAll(this.productMapper.toEntities(productsToUpdate));
     }
 
-    public Integer updateProductStock(Long quantity, Long productId) {
-        Query query = this.entityManager.createNativeQuery("UPDATE products \n" +
-                "SET stock_quantity = stock_quantity - :quantity \n" +
-                "WHERE id = :productId \n" +
-                "AND stock_quantity >= :quantity");
+    @Override
+    public Integer reserveProductStock(Long quantity, Long productId) {
+        Query query = this.entityManager.createNativeQuery("UPDATE products " +
+                "SET available_stock = available_stock - :quantity, " +
+                "reserved_stock = reserved_stock + :quantity " +
+                "WHERE id = :productId " +
+                "AND available_stock >= :quantity");
 
         query.setParameter("quantity", quantity)
                 .setParameter("productId", productId);
@@ -78,5 +81,19 @@ public class IProductRepository implements ProductRepository {
     @Override
     public void save(Product product) {
         this.productRepository.save(this.productMapper.toEntity(product));
+    }
+
+    public void freeReservedStock(Order order) {
+        order.getItems().forEach(item -> {
+            Query query = this.entityManager.createNativeQuery("UPDATE products " +
+                    "SET available_stock = available_stock + :quantity, " +
+                    "reserved_stock = reserved_stock - :quantity " +
+                    "WHERE id = :productId");
+
+            query.setParameter("quantity", item.getQuantity())
+                    .setParameter("productId", item.getProductId());
+
+            query.executeUpdate();
+        });
     }
 }

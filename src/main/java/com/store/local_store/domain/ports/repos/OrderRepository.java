@@ -14,4 +14,6 @@ public interface OrderRepository {
     List<Order> findAllWithState(long userId, String state);
 
     void save(Order order);
+
+    void saveCancel(Order order);
 }

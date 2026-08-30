@@ -50,9 +50,9 @@ public class LocalStoreApplication {
 			categoryRepository.save(categoryEntity);
 
 			productRepository.saveAll(List.of(
-                    new ProductEntity(null, "laptop", new BigDecimal("1500"), 10, categoryEntity),
-                    new ProductEntity(null, "pants", new BigDecimal("50"), 5, categoryEntity),
-                    new ProductEntity(null, "bed", new BigDecimal("250"), 1, categoryEntity)
+                   ProductEntity.create("laptop", new BigDecimal("1500"), 10, categoryEntity),
+                   ProductEntity.create("pants", new BigDecimal("50"), 5, categoryEntity),
+                   ProductEntity.create("bed", new BigDecimal("250"), 1, categoryEntity)
             ));
 		};
 	}
