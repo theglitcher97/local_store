@@ -1,5 +1,6 @@
 package com.store.local_store.domain.model;
 
+import com.store.local_store.domain.enums.OrderState;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ public class Order {
     private Long userId;
     private BigDecimal total;
     private List<OrderItem> items;
-    private String state;
+    private OrderState state;
 
 
     public static Order create(Long userId, BigDecimal totalPrice, List<OrderItem> items) {
@@ -23,13 +24,21 @@ public class Order {
         order.setUserId(userId);
         order.setTotal(totalPrice);
         order.setItems(items);
-        order.setState("PENDING");
+        order.setState(OrderState.PENDING);
         return order;
     }
 
+    private void setState(){};
+
     public void cancel() {
-        if (!state.equalsIgnoreCase("pending"))
+        if (state != OrderState.PENDING)
             throw new RuntimeException("Cannot cancel an order if is not pending");
-        state = "CANCELLED";
+        state = OrderState.CANCELLED;
+    }
+
+    public void complete() {
+        if (state != OrderState.PENDING)
+            throw new RuntimeException("Cannot complete an order if is not pending");
+        state = OrderState.COMPLETED;
     }
 }

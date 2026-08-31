@@ -65,7 +65,7 @@ public class IProductRepository implements ProductRepository {
     }
 
     @Override
-    public Integer reserveProductStock(Long quantity, Long productId) {
+    public Integer reserveProductStock(Long productId, Long quantity) {
         Query query = this.entityManager.createNativeQuery("UPDATE products " +
                 "SET available_stock = available_stock - :quantity, " +
                 "reserved_stock = reserved_stock + :quantity " +

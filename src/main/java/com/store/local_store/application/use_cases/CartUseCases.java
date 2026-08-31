@@ -7,10 +7,10 @@ import com.store.local_store.domain.model.*;
 import com.store.local_store.domain.ports.repos.CartRepository;
 import com.store.local_store.domain.ports.repos.OrderRepository;
 import com.store.local_store.domain.ports.repos.ProductRepository;
+import com.store.local_store.domain.services.ProductService;
 import com.store.local_store.web.dtos.CartDTO;
 import com.store.local_store.web.dtos.CartItemDTO;
 import com.store.local_store.web.exceptions.custom.EmptyCartException;
-import com.store.local_store.web.exceptions.custom.InsufficientStockException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +26,7 @@ public class CartUseCases {
     private CartRepository cartRepository;
     private CartItemAppMapper cartItemMapper;
     private OrderRepository orderRepository;
+    private ProductService productService;
 
     @Transactional
     public void addProduct(AddProductToCartCommand productToCard) {
@@ -59,12 +60,7 @@ public class CartUseCases {
         cart.getItems()
                 .stream().sorted(Comparator.comparing(item -> item.getProduct().getId()))
                 .forEach(item -> {
-                    // update available stock and reserved stock
-                    Integer rowsAffected = this.productRepository.reserveProductStock(item.getQuantity(), item.getProduct().getId());
-                    if (rowsAffected == 0)
-                        throw new InsufficientStockException(
-                                "Not enough stock for product: "+item.getProduct().getName() +
-                                "; required quantity: "+item.getQuantity());
+                    this.productService.reserveProduct(item.getProduct(), item.getQuantity());
                 });
 
         List<OrderItem> orderItems = cart.getItems().stream().map(OrderItem::create).toList();
@@ -73,7 +69,6 @@ public class CartUseCases {
 
         cart.clear();
         this.cartRepository.save(cart);
-
     }
 
     @Transactional

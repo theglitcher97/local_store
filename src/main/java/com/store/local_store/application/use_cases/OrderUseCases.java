@@ -1,6 +1,7 @@
 package com.store.local_store.application.use_cases;
 
 import com.store.local_store.application.model.CancelOrderCommand;
+import com.store.local_store.domain.enums.OrderState;
 import com.store.local_store.domain.model.Order;
 import com.store.local_store.domain.services.OrderService;
 import com.store.local_store.web.dtos.BasicOrderDTO;
@@ -8,14 +9,15 @@ import com.store.local_store.web.dtos.FullOrderDTO;
 import com.store.local_store.web.dtos.OrderItemDTO;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
+@Slf4j
 @AllArgsConstructor
 @Component
 public class OrderUseCases {
@@ -25,8 +27,14 @@ public class OrderUseCases {
         List<Order> orders;
         if (Objects.isNull(state) || state.equals("ALL"))
             orders = this.orderService.findAll(userId);
-        else
-            orders = this.orderService.findAll(userId, state);
+        else {
+            try {
+                orders = this.orderService.findAll(userId, OrderState.valueOf(state));
+            } catch (IllegalArgumentException e) {
+                log.info("Invalid state: "+state+"; searching for all orders");
+                orders = this.orderService.findAll(userId);
+            }
+        }
         return orders.stream()
                 .map(order -> new BasicOrderDTO(order.getId(), order.getItems().size(), order.getTotal(), order.getState()))
                 // lower to bigger -> (reversed) bigger to lower

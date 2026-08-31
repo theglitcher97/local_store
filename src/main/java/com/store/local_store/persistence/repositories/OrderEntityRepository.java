@@ -1,7 +1,7 @@
 package com.store.local_store.persistence.repositories;
 
+import com.store.local_store.domain.enums.OrderState;
 import com.store.local_store.persistence.entities.OrderEntity;
-import com.store.local_store.persistence.enums.OrderState;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

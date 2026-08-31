@@ -1,5 +1,6 @@
 package com.store.local_store.domain.ports.repos;
 
+import com.store.local_store.domain.enums.OrderState;
 import com.store.local_store.domain.model.Order;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface OrderRepository {
 
     Order findByIdAndUserId(Long id, long userId);
 
-    List<Order> findAllWithState(long userId, String state);
+    List<Order> findAllWithState(long userId, OrderState state);
 
     void save(Order order);
 

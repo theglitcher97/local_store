@@ -1,4 +1,4 @@
-package com.store.local_store.persistence.enums;
+package com.store.local_store.domain.enums;
 
 public enum OrderState {
     PENDING,

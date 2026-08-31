@@ -16,7 +16,7 @@ public interface ProductRepository {
 
     void saveAll(List<Product> productsToUpdate);
 
-    Integer reserveProductStock(Long quantity, Long productId);
+    Integer reserveProductStock(Long productId, Long quantity);
 
     void save(Product product);
 }

@@ -5,6 +5,7 @@ import com.store.local_store.domain.common.PageResult;
 import com.store.local_store.domain.model.Product;
 import com.store.local_store.domain.ports.repos.ProductRepository;
 import com.store.local_store.web.enums.SORT_DIR;
+import com.store.local_store.web.exceptions.custom.InsufficientStockException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -32,5 +33,13 @@ public class ProductService {
         if (command.price() != null) product.setPrice(command.price());
         if (command.quantity() != null) product.setAvailableStock(command.quantity());
         this.productRepository.save(product);
+    }
+
+    public void reserveProduct(Product product, Long quantity) {
+        // update available stock and reserved stock
+        Integer rowsAffected = this.productRepository.reserveProductStock(product.getId(), quantity);
+        if (rowsAffected == 0)
+            throw new InsufficientStockException(
+                    "Not enough stock for product: "+ product.getName() + "; required quantity: "+quantity);
     }
 }

@@ -1,11 +1,11 @@
 package com.store.local_store.persistence.repo_impl;
 
+import com.store.local_store.domain.enums.OrderState;
 import com.store.local_store.domain.model.Order;
 import com.store.local_store.domain.model.OrderItem;
 import com.store.local_store.domain.ports.repos.OrderRepository;
 import com.store.local_store.persistence.entities.OrderEntity;
 import com.store.local_store.persistence.entities.UserEntity;
-import com.store.local_store.persistence.enums.OrderState;
 import com.store.local_store.persistence.mapper.OrderItemMapper;
 import com.store.local_store.persistence.mapper.OrderMapper;
 import com.store.local_store.persistence.repositories.OrderEntityRepository;
@@ -48,23 +48,20 @@ public class IOrderRepository implements OrderRepository {
     }
 
     @Override
-    public List<Order> findAllWithState(long userId, String state) {
-        OrderState orderState = OrderState.valueOf(state);
-        List<OrderEntity> orderEntities = this.orderRepository.findAllByUserAndState(userId, orderState);
+    public List<Order> findAllWithState(long userId, OrderState state) {
+        List<OrderEntity> orderEntities = this.orderRepository.findAllByUserAndState(userId, state);
         return this.orderMapper.toModel(orderEntities);
     }
 
     @Override
     public void save(Order order) {
         OrderEntity orderEntity = this.orderMapper.toEntity(order);
-        orderEntity.setState(OrderState.valueOf(order.getState()));
         this.orderRepository.save(orderEntity);
     }
 
     @Override
     public void saveCancel(Order order) {
         OrderEntity orderEntity = this.orderMapper.toEntity(order);
-        orderEntity.setState(OrderState.valueOf(order.getState()));
         this.orderRepository.save(orderEntity);
         this.productRepository.freeReservedStock(order);
     }
@@ -73,7 +70,7 @@ public class IOrderRepository implements OrderRepository {
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setUser(userEntity);
         orderEntity.setTotal(order.getTotal());
-        orderEntity.setState(OrderState.valueOf(order.getState()));
+        orderEntity.setState(order.getState());
 
         for (OrderItem item : order.getItems()) {
             orderEntity.addItem(this.orderItemMapper.toEntity(item));

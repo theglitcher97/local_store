@@ -1,6 +1,6 @@
 package com.store.local_store.persistence.entities;
 
-import com.store.local_store.persistence.enums.OrderState;
+import com.store.local_store.domain.enums.OrderState;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

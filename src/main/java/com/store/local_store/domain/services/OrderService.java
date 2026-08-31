@@ -1,5 +1,6 @@
 package com.store.local_store.domain.services;
 
+import com.store.local_store.domain.enums.OrderState;
 import com.store.local_store.domain.model.Order;
 import com.store.local_store.domain.ports.repos.OrderRepository;
 import lombok.AllArgsConstructor;
@@ -20,7 +21,7 @@ public class OrderService {
         return this.orderRepository.findAll(userId);
     }
 
-    public List<Order> findAll(long userId, String state) {
+    public List<Order> findAll(long userId, OrderState state) {
         return this.orderRepository.findAllWithState(userId, state);
 
     }
