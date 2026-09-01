@@ -67,10 +67,8 @@ public class IProductRepository implements ProductRepository {
     @Override
     public Integer reserveProductStock(Long productId, Long quantity) {
         Query query = this.entityManager.createNativeQuery("UPDATE products " +
-                "SET available_stock = available_stock - :quantity, " +
-                "reserved_stock = reserved_stock + :quantity " +
-                "WHERE id = :productId " +
-                "AND available_stock >= :quantity");
+                "SET available_stock = (available_stock - :quantity), reserved_stock = (reserved_stock + :quantity) " +
+                "WHERE id = :productId AND available_stock >= :quantity;");
 
         query.setParameter("quantity", quantity)
                 .setParameter("productId", productId);
@@ -83,17 +81,15 @@ public class IProductRepository implements ProductRepository {
         this.productRepository.save(this.productMapper.toEntity(product));
     }
 
-    public void freeReservedStock(Order order) {
-        order.getItems().forEach(item -> {
-            Query query = this.entityManager.createNativeQuery("UPDATE products " +
-                    "SET available_stock = available_stock + :quantity, " +
-                    "reserved_stock = reserved_stock - :quantity " +
-                    "WHERE id = :productId");
+    @Override
+    public Integer freeReservedStock(Long productId, Long quantity) {
+        Query query = this.entityManager.createNativeQuery("UPDATE products " +
+                "SET available_stock = available_stock + :quantity, " +
+                "reserved_stock = reserved_stock - :quantity " +
+                "WHERE id = :productId AND reserved_stock >= :quantity");
 
-            query.setParameter("quantity", item.getQuantity())
-                    .setParameter("productId", item.getProductId());
-
-            query.executeUpdate();
-        });
+        query.setParameter("quantity", quantity)
+                .setParameter("productId", productId);
+        return query.executeUpdate();
     }
 }

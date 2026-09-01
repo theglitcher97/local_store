@@ -55,20 +55,19 @@ public class IOrderRepository implements OrderRepository {
 
     @Override
     public void save(Order order) {
-        OrderEntity orderEntity = this.orderMapper.toEntity(order);
+        OrderEntity orderEntity = this.toEntity(order);
         this.orderRepository.save(orderEntity);
-    }
-
-    @Override
-    public void saveCancel(Order order) {
-        OrderEntity orderEntity = this.orderMapper.toEntity(order);
-        this.orderRepository.save(orderEntity);
-        this.productRepository.freeReservedStock(order);
     }
 
     private OrderEntity toEntity(Order order, UserEntity userEntity) {
-        OrderEntity orderEntity = new OrderEntity();
+        OrderEntity orderEntity = this.toEntity(order);
         orderEntity.setUser(userEntity);
+        return orderEntity;
+    }
+
+    private OrderEntity toEntity(Order order) {
+        OrderEntity orderEntity = new OrderEntity();
+        orderEntity.setId(order.getId());
         orderEntity.setTotal(order.getTotal());
         orderEntity.setState(order.getState());
 

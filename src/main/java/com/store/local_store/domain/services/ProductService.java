@@ -2,10 +2,13 @@ package com.store.local_store.domain.services;
 
 import com.store.local_store.application.model.UpdateProductCommand;
 import com.store.local_store.domain.common.PageResult;
+import com.store.local_store.domain.model.Order;
+import com.store.local_store.domain.model.OrderItem;
 import com.store.local_store.domain.model.Product;
 import com.store.local_store.domain.ports.repos.ProductRepository;
 import com.store.local_store.web.enums.SORT_DIR;
 import com.store.local_store.web.exceptions.custom.InsufficientStockException;
+import jakarta.persistence.Query;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -41,5 +44,16 @@ public class ProductService {
         if (rowsAffected == 0)
             throw new InsufficientStockException(
                     "Not enough stock for product: "+ product.getName() + "; required quantity: "+quantity);
+    }
+
+    public void releaseReservation(Order order) {
+        Integer rowsAffected;
+        for (OrderItem item : order.getItems()) {
+            rowsAffected = this.productRepository.freeReservedStock(item.getProductId(), item.getQuantity());
+            if (rowsAffected == 0)
+                // temporal
+                throw new RuntimeException("Invalid order reservation: "+order.getId()+
+                        "; order item id: "+item.getId());
+        }
     }
 }

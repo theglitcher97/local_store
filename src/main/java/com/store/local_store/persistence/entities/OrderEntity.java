@@ -33,6 +33,7 @@ public class OrderEntity {
     private BigDecimal total;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private OrderState state;
 
     public void addItem(OrderItemEntity item) {

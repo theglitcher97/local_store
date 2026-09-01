@@ -4,6 +4,7 @@ import com.store.local_store.application.model.CancelOrderCommand;
 import com.store.local_store.domain.enums.OrderState;
 import com.store.local_store.domain.model.Order;
 import com.store.local_store.domain.services.OrderService;
+import com.store.local_store.domain.services.ProductService;
 import com.store.local_store.web.dtos.BasicOrderDTO;
 import com.store.local_store.web.dtos.FullOrderDTO;
 import com.store.local_store.web.dtos.OrderItemDTO;
@@ -22,6 +23,7 @@ import java.util.Objects;
 @Component
 public class OrderUseCases {
     private OrderService orderService;
+    private ProductService productService;
 
     public List<BasicOrderDTO> findOrders(long userId, String state) {
         List<Order> orders;
@@ -59,6 +61,7 @@ public class OrderUseCases {
     public void cancelOrder(CancelOrderCommand command) {
         Order order = this.orderService.findOrder(command.orderId(), command.userId());
         order.cancel();
-        this.orderService.saveCancel(order);
+        this.orderService.save(order);
+        this.productService.releaseReservation(order);
     }
 }

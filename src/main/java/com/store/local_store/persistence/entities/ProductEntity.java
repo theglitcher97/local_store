@@ -24,8 +24,7 @@ public class ProductEntity {
     private BigDecimal price;
     @Column(nullable = false)
     private Integer availableStock;
-    @Column(nullable = false)
-    private Integer reservedStock = 0;
+    private Integer reservedStock;
 
     @ManyToOne
     @JoinColumn(nullable = false)
@@ -37,6 +36,7 @@ public class ProductEntity {
         productEntity.setCategory(categoryEntity);
         productEntity.setName(name);
         productEntity.setPrice(price);
+        productEntity.setReservedStock(0);
         return productEntity;
     }
 }
