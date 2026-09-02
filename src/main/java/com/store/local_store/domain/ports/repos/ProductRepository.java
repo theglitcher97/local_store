@@ -1,7 +1,6 @@
 package com.store.local_store.domain.ports.repos;
 
 import com.store.local_store.domain.common.PageResult;
-import com.store.local_store.domain.model.Order;
 import com.store.local_store.domain.model.Product;
 import com.store.local_store.web.enums.SORT_DIR;
 
@@ -22,4 +21,6 @@ public interface ProductRepository {
     void save(Product product);
 
     Integer freeReservedStock(Long productId, Long quantity);
+
+    Integer removeReserve(Long productId, Long quantity);
 }

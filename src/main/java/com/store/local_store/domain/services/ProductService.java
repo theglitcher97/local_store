@@ -8,7 +8,6 @@ import com.store.local_store.domain.model.Product;
 import com.store.local_store.domain.ports.repos.ProductRepository;
 import com.store.local_store.web.enums.SORT_DIR;
 import com.store.local_store.web.exceptions.custom.InsufficientStockException;
-import jakarta.persistence.Query;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -54,6 +53,17 @@ public class ProductService {
                 // temporal
                 throw new RuntimeException("Invalid order reservation: "+order.getId()+
                         "; order item id: "+item.getId());
+        }
+    }
+
+    public void completeReservation(Order order) {
+        Integer rowsAffected;
+        for (OrderItem item : order.getItems()) {
+            rowsAffected = this.productRepository.removeReserve(item.getProductId(), item.getQuantity());
+            if (rowsAffected == 0)
+                // temporal
+                throw new RuntimeException("Unable to removed reserved products;\n" +
+                        "order id: "+order.getId()+"; order item id:"+ item.getId()+"; product Id: "+item.getProductId());
         }
     }
 }

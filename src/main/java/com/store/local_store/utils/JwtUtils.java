@@ -28,7 +28,7 @@ public class JwtUtils {
         return Jwts.builder()
                 .subject(userId)
                 .issuedAt(new Date())
-                .expiration(EXPIRATION_TIME)
+                .expiration(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(10)))
                 .signWith(Keys.hmacShaKeyFor(JWT_SECRET.getBytes()), SignatureAlgorithm.HS256)
                 .issuer(JWT_ISSUER)
                 .compact();

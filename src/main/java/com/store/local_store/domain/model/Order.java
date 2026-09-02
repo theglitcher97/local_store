@@ -41,4 +41,9 @@ public class Order {
             throw new RuntimeException("Cannot complete an order if is not pending");
         state = OrderState.COMPLETED;
     }
+
+    public void validatePayment() {
+        if (state != OrderState.PENDING)
+            throw new RuntimeException("Cannot complete an order if is not pending");
+    }
 }

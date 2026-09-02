@@ -1,7 +1,6 @@
 package com.store.local_store.persistence.repo_impl;
 
 import com.store.local_store.domain.common.PageResult;
-import com.store.local_store.domain.model.Order;
 import com.store.local_store.domain.model.Product;
 import com.store.local_store.domain.ports.repos.ProductRepository;
 import com.store.local_store.persistence.entities.ProductEntity;
@@ -87,6 +86,17 @@ public class IProductRepository implements ProductRepository {
                 "SET available_stock = available_stock + :quantity, " +
                 "reserved_stock = reserved_stock - :quantity " +
                 "WHERE id = :productId AND reserved_stock >= :quantity");
+
+        query.setParameter("quantity", quantity)
+                .setParameter("productId", productId);
+        return query.executeUpdate();
+    }
+
+    @Override
+    public Integer removeReserve(Long productId, Long quantity) {
+        Query query = this.entityManager.createNativeQuery("UPDATE products " +
+                "SET reserved_stock = reserved_stock - :quantity " +
+                "WHERE id = :productId");
 
         query.setParameter("quantity", quantity)
                 .setParameter("productId", productId);

@@ -1,9 +1,13 @@
 package com.store.local_store.application.use_cases;
 
 import com.store.local_store.application.model.CancelOrderCommand;
+import com.store.local_store.application.model.PayOrderCommand;
 import com.store.local_store.domain.enums.OrderState;
+import com.store.local_store.domain.enums.PaymentStatus;
 import com.store.local_store.domain.model.Order;
+import com.store.local_store.domain.model.Payment;
 import com.store.local_store.domain.services.OrderService;
+import com.store.local_store.domain.services.PaymentService;
 import com.store.local_store.domain.services.ProductService;
 import com.store.local_store.web.dtos.BasicOrderDTO;
 import com.store.local_store.web.dtos.FullOrderDTO;
@@ -24,6 +28,7 @@ import java.util.Objects;
 public class OrderUseCases {
     private OrderService orderService;
     private ProductService productService;
+    private PaymentService paymentService;
 
     public List<BasicOrderDTO> findOrders(long userId, String state) {
         List<Order> orders;
@@ -63,5 +68,18 @@ public class OrderUseCases {
         order.cancel();
         this.orderService.save(order);
         this.productService.releaseReservation(order);
+    }
+
+    @Transactional
+    public void payOrder(PayOrderCommand command) {
+        Order order = this.orderService.findOrder(command.orderId(), command.userId());
+        order.validatePayment();
+
+        Payment payment = this.paymentService.pay(order, command.method());
+        if (payment.getStatus() == PaymentStatus.SUCCESS){
+            order.complete();
+            this.orderService.save(order);
+            this.productService.completeReservation(order);
+        }
     }
 }

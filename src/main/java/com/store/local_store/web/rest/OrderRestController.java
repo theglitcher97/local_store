@@ -1,7 +1,9 @@
 package com.store.local_store.web.rest;
 
 import com.store.local_store.application.model.CancelOrderCommand;
+import com.store.local_store.application.model.PayOrderCommand;
 import com.store.local_store.application.use_cases.OrderUseCases;
+import com.store.local_store.domain.enums.PaymentMethods;
 import com.store.local_store.web.dtos.BasicOrderDTO;
 import com.store.local_store.web.dtos.FullOrderDTO;
 import jakarta.websocket.server.PathParam;
@@ -38,4 +40,12 @@ public class OrderRestController {
        return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/{id}/pay")
+    public ResponseEntity<Void> payOrder(@AuthenticationPrincipal String userId,
+                                         @PathVariable Long id,
+                                         @PathParam("method") PaymentMethods method) {
+        PayOrderCommand command = new PayOrderCommand(id, method, Long.parseLong(userId));
+        this.orderUseCases.payOrder(command);
+        return ResponseEntity.ok().build();
+    }
 }
