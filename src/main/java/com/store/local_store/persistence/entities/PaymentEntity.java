@@ -25,7 +25,7 @@ public class PaymentEntity {
     @JoinColumn(name = "order_id", updatable = false, nullable = false)
     private OrderEntity order;
 
-    @Column(updatable = false)
+    @Column(updatable = false, nullable = false)
     private BigDecimal amount;
 
     @Column(updatable = false)
