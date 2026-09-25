@@ -14,11 +14,13 @@ public class EntityExceptionHandlers {
 
     @ExceptionHandler(exception = {EntityNotFoundException.class})
     public ResponseEntity<GlobalExceptionResponse> entityNotFound(EntityNotFoundException e) {
-        return new ResponseEntity<>(new GlobalExceptionResponse(e.getMessage(), "404"), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new GlobalExceptionResponse(e.getMessage(), HttpStatus.NOT_FOUND.toString()),
+                HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(exception = {PasswordDontMatchException.class, IncorrectPasswordException.class})
-    public ResponseEntity<GlobalExceptionResponse> passwordExceptionsHandler(RuntimeException e) {
-        return new ResponseEntity<>(new GlobalExceptionResponse(e.getMessage(), "404"), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<GlobalExceptionResponse> passwordException(RuntimeException e) {
+        return new ResponseEntity<>(new GlobalExceptionResponse(e.getMessage(), HttpStatus.BAD_REQUEST.toString()),
+                HttpStatus.BAD_REQUEST);
     }
 }

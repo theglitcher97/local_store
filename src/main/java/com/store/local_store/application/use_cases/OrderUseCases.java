@@ -12,7 +12,7 @@ import com.store.local_store.domain.services.ProductService;
 import com.store.local_store.web.dtos.BasicOrderDTO;
 import com.store.local_store.web.dtos.FullOrderDTO;
 import com.store.local_store.web.dtos.OrderItemDTO;
-import jakarta.persistence.EntityNotFoundException;
+import com.store.local_store.web.exceptions.custom.OrderNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -52,7 +52,7 @@ public class OrderUseCases {
     public FullOrderDTO findOrder(Long id, long userId) {
         Order order = this.orderService.findOrder(id, userId);
         if (Objects.isNull(order))
-            throw new EntityNotFoundException("Cannot find order for user");
+            throw new OrderNotFoundException("Cannot find order for user");
 
         List<OrderItemDTO> itemDTOS = order.getItems().stream()
                 .map(item -> new OrderItemDTO(item.getId(), item.getProductName(), item.getPricePerUnit(), item.getQuantity()))

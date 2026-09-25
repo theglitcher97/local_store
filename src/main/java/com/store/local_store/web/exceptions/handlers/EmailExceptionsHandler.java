@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class EmailExceptionsHandler {
     @ExceptionHandler(exception = {EmailAlreadyExistsException.class})
     public ResponseEntity<GlobalExceptionResponse> emailAlreadyExists(EmailAlreadyExistsException e) {
-        return new ResponseEntity<>(new GlobalExceptionResponse(e.getMessage(), "404"), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new GlobalExceptionResponse(e.getMessage(), HttpStatus.BAD_REQUEST.toString()),
+                HttpStatus.BAD_REQUEST);
     }
 }

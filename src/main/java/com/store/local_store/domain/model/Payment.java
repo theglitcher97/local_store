@@ -2,6 +2,7 @@ package com.store.local_store.domain.model;
 
 import com.store.local_store.domain.enums.PaymentMethods;
 import com.store.local_store.domain.enums.PaymentStatus;
+import com.store.local_store.web.exceptions.custom.PaymentStatusException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +27,7 @@ public class Payment {
 
     public void setStatus(PaymentStatus status) {
         if (!Objects.isNull(this.status))
-            throw new RuntimeException("A Payment's status can only be assigned once");
+            throw new PaymentStatusException("A Payment's status can only be assigned once");
         this.status = status;
     }
 

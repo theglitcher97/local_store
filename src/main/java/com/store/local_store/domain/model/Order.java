@@ -1,6 +1,8 @@
 package com.store.local_store.domain.model;
 
 import com.store.local_store.domain.enums.OrderState;
+import com.store.local_store.web.exceptions.custom.InvalidOrderStateException;
+import com.store.local_store.web.exceptions.custom.PaymentNotAllowedException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,18 +34,18 @@ public class Order {
 
     public void cancel() {
         if (state != OrderState.PENDING)
-            throw new RuntimeException("Cannot cancel an order if is not pending");
+            throw new InvalidOrderStateException("Cannot cancel an order if is not pending");
         state = OrderState.CANCELLED;
     }
 
     public void complete() {
         if (state != OrderState.PENDING)
-            throw new RuntimeException("Cannot complete an order if is not pending");
+            throw new InvalidOrderStateException("Cannot complete an order if is not pending");
         state = OrderState.COMPLETED;
     }
 
     public void validatePayment() {
         if (state != OrderState.PENDING)
-            throw new RuntimeException("Cannot complete an order if is not pending");
+            throw new PaymentNotAllowedException("Cannot complete an order if is not pending");
     }
 }

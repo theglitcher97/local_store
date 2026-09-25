@@ -1,5 +1,6 @@
 package com.store.local_store.domain.model;
 
+import com.store.local_store.web.exceptions.custom.InvalidCartStateException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,7 @@ public class CartItem {
 
     public void reduceProductQuantity() {
         if (quantity <= 0)
-            throw new RuntimeException("CartItem quantity cannot be zero or less before calling this method");
+            throw new InvalidCartStateException("CartItem quantity cannot be zero or less before calling this method");
 
         quantity--;
     }
